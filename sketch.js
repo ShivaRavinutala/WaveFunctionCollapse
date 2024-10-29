@@ -1,39 +1,14 @@
 let tiles = [];
-let all = []
+const tileImages = [];
 
 let grid = [];
 
-const DIM = 10;
-let ready = false;
-let brakes = false;
+const DIM = 25;
 
-// LOAD TILE IMAGES HERE!!
 function preload() {
-  // naming convention: [blank, down, left, right, up].png
-  let directionDirectories = [  
-  ]
-
-  // naming convention: [i].png 
-  let indexedDirectories = [  
-    {path: "tiles/kennytiles", num: 20},
-  ]
-
-  for(let dir of indexedDirectories){
-    let images = [];
-    for (let i = 0; i < dir.num; i++) { images[i] = loadImage(`${dir.path}/${i}.png`); }
-    all.push({ key: dir.path, array: images });
-  }
-
-  for(let dir of directionDirectories){
-    let images = [];
-    for (let i = 0; i < 5; i++) { 
-      images[0] = loadImage(`${dir}/blank.png`);
-      images[1] = loadImage(`${dir}/down.png`);
-      images[2] = loadImage(`${dir}/left.png`);
-      images[3] = loadImage(`${dir}/right.png`);
-      images[4] = loadImage(`${dir}/up.png`);
-    }
-    all.push({ key: dir, array: images });
+  const path = 'tiles/kennytiles';
+  for (let i = 0; i < 20; i++) {
+    tileImages[i] = loadImage(`${path}/${i}.png`);
   }
 }
 
@@ -47,76 +22,43 @@ function removeDuplicatedTiles(tiles) {
 }
 
 function setup() {
-  let canvas = {width: 800, height: 800}
-  createCanvas(canvas.width, canvas.height);
-
-  const directory = "tiles/"
-  
+  createCanvas(400, 400);
   //randomSeed(15);
-  // USER INPUT
-  let div = createDiv("directory:");
-  div.position(50, canvas.height + 25);
 
-  input = createInput('');
-  input.position(50, canvas.height + 50);
-  let button = createButton('go');
-  button.position(input.x + input.width, input.y);
-  button.mousePressed(() => {
-    if(!ready && input.value().length > 0){
-      let path = directory + input.value();
-      ready = makeTilesArray(path);
-    }
-    else if(ready && input.value().length > 0){
-      stopWFC();
+  // tiles[0] = new Tile(tileImages[0], ['AAA', 'AAA', 'AAA', 'AAA']);
+  // tiles[1] = new Tile(tileImages[1], ['ABA', 'ABA', 'ABA', 'AAA']);
+  // tiles[2] = new Tile(tileImages[2], ['BAA', 'AAB', 'AAA', 'AAA']);
+  // tiles[3] = new Tile(tileImages[3], ['BAA', 'AAA', 'AAB', 'AAA']);
+  // tiles[4] = new Tile(tileImages[4], ['ABA', 'ABA', 'AAA', 'AAA']);
+  // tiles[5] = new Tile(tileImages[5], ['ABA', 'AAA', 'ABA', 'AAA']);
+  // tiles[6] = new Tile(tileImages[6], ['ABA', 'ABA', 'ABA', 'ABA']);
 
-      let path = directory + input.value();
-      ready = makeTilesArray(path);
-    }
-  });
-}
+  // Loaded and created the tiles
+  tiles[0] = new Tile(tileImages[0], ['AAA', 'AAA', 'AAA', 'AAA']);
+  tiles[1] = new Tile(tileImages[1], ['AAA', 'ABA', 'ABA', 'AAA']);
+  tiles[2] = new Tile(tileImages[2], ['AAA', 'AAA', 'ABA', 'ABA']);
+  tiles[3] = new Tile(tileImages[3], ['AAA', 'ABA', 'ABA', 'AAA']);
+  tiles[4] = new Tile(tileImages[4], ['AAA', 'AAA', 'ABA', 'ABA']);
+  tiles[5] = new Tile(tileImages[5], ['AAA', 'ABA', 'ABA', 'ABA']);
+  tiles[6] = new Tile(tileImages[6], ['ABA', 'AAA', 'ABA', 'AAA']);
+  tiles[7] = new Tile(tileImages[7], ['AAA', 'ABA', 'AAA', 'ABA']);
+  tiles[8] = new Tile(tileImages[8], ['ABA', 'ABA', 'ABA', 'ABA']);
+  tiles[9] = new Tile(tileImages[9], ['AAA', 'AAA', 'ABA', 'AAA']);
+  tiles[10] = new Tile(tileImages[10], ['AAA', 'AAA', 'AAA', 'ABA']);
+  tiles[11] = new Tile(tileImages[11], ['ABA', 'ABA', 'AAA', 'AAA']);
+  tiles[12] = new Tile(tileImages[12], ['ABA', 'AAA', 'AAA', 'ABA']);
+  tiles[13] = new Tile(tileImages[13], ['ABA', 'ABA', 'AAA', 'AAA']);
+  tiles[14] = new Tile(tileImages[14], ['ABA', 'AAA', 'AAA', 'ABA']);
+  tiles[15] = new Tile(tileImages[15], ['ABA', 'ABA', 'AAA', 'ABA']);
+  tiles[16] = new Tile(tileImages[16], ['ABA', 'ABA', 'ABA', 'AAA']);
+  tiles[17] = new Tile(tileImages[17], ['ABA', 'AAA', 'ABA', 'ABA']);
+  tiles[18] = new Tile(tileImages[18], ['ABA', 'AAA', 'AAA', 'AAA']);
+  tiles[19] = new Tile(tileImages[19], ['AAA', 'ABA', 'AAA', 'AAA']);
 
-// DEFINE ADJACENCIES FOR TILESET HERE!!
-function makeTilesArray(path){
-  let tileImages;
-  let check = all.filter(item => item.key == path);
-  if(check.length > 0){ tileImages = check[0].array; }
-  else{ 
-    console.log(`please enter the name of a directory in "tiles/" that contains tile images
-      > "${path}" does not contain tile images.`); 
-    return false;
-  }
-
-  switch(path){
-    case "tiles/kennytiles":
-      tiles[0] = new Tile(tileImages[0], ['AAA', 'AAA', 'AAA', 'AAA']);
-      tiles[1] = new Tile(tileImages[1], ['AAA', 'ABA', 'ABA', 'AAA']);
-      tiles[2] = new Tile(tileImages[2], ['AAA', 'AAA', 'ABA', 'ABA']);
-      tiles[3] = new Tile(tileImages[3], ['AAA', 'ABA', 'ABA', 'AAA']);
-      tiles[4] = new Tile(tileImages[4], ['AAA', 'AAA', 'ABA', 'ABA']);
-      tiles[5] = new Tile(tileImages[5], ['AAA', 'ABA', 'ABA', 'ABA']);
-      tiles[6] = new Tile(tileImages[6], ['ABA', 'AAA', 'ABA', 'AAA']);
-      tiles[7] = new Tile(tileImages[7], ['AAA', 'ABA', 'AAA', 'ABA']);
-      tiles[8] = new Tile(tileImages[8], ['ABA', 'ABA', 'ABA', 'ABA']);
-      tiles[9] = new Tile(tileImages[9], ['AAA', 'AAA', 'ABA', 'AAA']);
-      tiles[10] = new Tile(tileImages[10], ['AAA', 'AAA', 'AAA', 'ABA']);
-      tiles[11] = new Tile(tileImages[11], ['ABA', 'ABA', 'AAA', 'AAA']);
-      tiles[12] = new Tile(tileImages[12], ['ABA', 'AAA', 'AAA', 'ABA']);
-      tiles[13] = new Tile(tileImages[13], ['ABA', 'ABA', 'AAA', 'AAA']);
-      tiles[14] = new Tile(tileImages[14], ['ABA', 'AAA', 'AAA', 'ABA']);
-      tiles[15] = new Tile(tileImages[15], ['ABA', 'ABA', 'AAA', 'ABA']);
-      tiles[16] = new Tile(tileImages[16], ['ABA', 'ABA', 'ABA', 'AAA']);
-      tiles[17] = new Tile(tileImages[17], ['ABA', 'AAA', 'ABA', 'ABA']);
-      tiles[18] = new Tile(tileImages[18], ['ABA', 'AAA', 'AAA', 'AAA']);
-      tiles[19] = new Tile(tileImages[19], ['AAA', 'ABA', 'AAA', 'AAA']);
-      break;
-    default: 
-      console.log(`problem with path '${path}'`)
-      break;
-    }
   for (let i = 0; i < tiles.length - 1; i++) {
     tiles[i].index = i;
   }
-  
+
   const initialTileCount = tiles.length;
   for (let i = 0; i < initialTileCount; i++) {
     let tempTiles = [];
@@ -126,16 +68,15 @@ function makeTilesArray(path){
     tempTiles = removeDuplicatedTiles(tempTiles);
     tiles = tiles.concat(tempTiles);
   }
-  //console.log(tiles.length);
-  
+  console.log(tiles.length);
+
   // Generate the adjacency rules based on edges
   for (let i = 0; i < tiles.length; i++) {
     const tile = tiles[i];
     tile.analyze(tiles);
   }
-  
+
   startOver();
-  return true;
 }
 
 function startOver() {
@@ -166,18 +107,6 @@ function mousePressed() {
 }
 
 function draw() {
-  if(ready){ WFC(); }
-  if(brakes) { stopWFC() }
-}
-
-function stopWFC(){
-  tiles = [];
-  grid = [];
-  ready = false;
-  brakes = false;
-}
-
-function WFC() {
   background(0);
 
   const w = width / DIM;
@@ -199,9 +128,10 @@ function WFC() {
   // Pick cell with least entropy
   let gridCopy = grid.slice();
   gridCopy = gridCopy.filter((a) => !a.collapsed);
+  // console.table(grid);
+  // console.table(gridCopy);
 
   if (gridCopy.length == 0) {
-    //brakes = true;
     return;
   }
   gridCopy.sort((a, b) => {
@@ -223,7 +153,6 @@ function WFC() {
   const pick = random(cell.options);
   if (pick === undefined) {
     startOver();
-    //brakes = true;
     return;
   }
   cell.options = [pick];
@@ -281,7 +210,6 @@ function WFC() {
         nextGrid[index] = new Cell(options);
       }
     }
-
   }
 
   grid = nextGrid;
