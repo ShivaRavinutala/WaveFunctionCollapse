@@ -214,3 +214,9 @@ function draw() {
 
   grid = nextGrid;
 }
+
+function keyPressed() {
+  if (key === 'R' || key === 'r') {
+    startOver();
+  }
+}
